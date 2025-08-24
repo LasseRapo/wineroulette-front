@@ -12,6 +12,8 @@ const Row = ({ obj, onLabelChange, onColorChange, onRowRemove, headerComponent})
   )
 }
 
+const MIN_SECTORS = 2;
+const MAX_SECTORS = 20;
 
 export default function SettingsMenu({ sectors, setSectors, showMenu = false }) {
 
@@ -21,14 +23,17 @@ export default function SettingsMenu({ sectors, setSectors, showMenu = false }) 
 
 
   function _addRow() {
+    if (sectors.length >= MAX_SECTORS) return;
     setSectors((prev) => ([...prev, { id: generateUniqueID(), label: "", color: "#ffffff" }]))
   }
 
   function _removeRow() {
+    if (sectors.length <= MIN_SECTORS) return;
     setSectors((prev) => prev.slice(0, -1))
   }
 
   function onRowRemove(index) {
+    if (sectors.length <= MIN_SECTORS) return;
     setSectors((prev) => {
 
       const newArr = prev.filter((item, prevIndex) => {
@@ -104,7 +109,7 @@ export default function SettingsMenu({ sectors, setSectors, showMenu = false }) 
     <div id='settings-menu-container' className={showMenu ? '' : 'hidden'}>
 
       
-      <h3>Sektorit</h3>
+      <h3>Sektorit ({sectors.length}/{MAX_SECTORS})</h3>
 
       <div id='settings-menu-row-container' className="row-container">
 
@@ -126,9 +131,10 @@ export default function SettingsMenu({ sectors, setSectors, showMenu = false }) 
         <button
           id='add-row-button'
           className="settings-menu-button"
+          disabled={sectors.length >= MAX_SECTORS}
           onClick={_addRow}>+</button>
         <button id='remove-row-button'
-          style={sectors.length > 2 ? { display: 'block' } : { display: 'none' }}
+          style={sectors.length > MIN_SECTORS ? { display: 'block' } : { display: 'none' }}
           className="settings-menu-button"
           onClick={_removeRow}>-</button>
       </div>

@@ -20,11 +20,16 @@ export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
 
   function onSpinClick(e) {
 
-    let [spinRotation, offset] = calculateRotations(10, 20)
+    let [spinRotation, offset, theoreticalMax] = calculateRotations(3, 7, true)
     while( spinRotation === rotation) {
-      [spinRotation, offset] = calculateRotations(10, 20)
-    }    
-    setRotation(spinRotation)
+      [spinRotation, offset, theoreticalMax] = calculateRotations(3, 7, true)
+    }
+    
+    setRotation(prev => {
+      const newRotation = prev + spinRotation
+      setSelectedIndex(null)
+      return newRotation % (5 * theoreticalMax)
+    })
 
   }
 
@@ -99,7 +104,18 @@ export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
 
   return (
     <>
-      <div className="wheel" style={{ 'rotate': `${rotation}deg`, '--wheel-size': `${size}px` }}>
+      <div className="wheel" 
+        style={{ 'rotate': `${rotation}deg`, '--wheel-size': `${size}px` }}
+        onTransitionEnd={(e) => {
+          
+          if( e.propertyName !== "rotate") return
+
+          const effectiveOffset = rotation % 360
+          const selected = Math.floor(((360 - effectiveOffset) % 360) / sweep)
+          setSelectedIndex(selected)
+
+          if(onSelect) onSelect(sectors[selected], selected)
+        }}>
         <svg viewBox={`0 0 ${sizeUnits} ${sizeUnits}`}>{paths}</svg>
       </div>
 

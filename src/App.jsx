@@ -35,7 +35,7 @@ function App() {
             <WheelOfFortune
               sectors={sectors}
               size={800}
-              onSelect={(sector, index) => alert(`Selected ${sector.label} (index ${index})`)}
+              onSelect={(sector, index) => console.log(`Selected ${sector.label} (index ${index})`)}
             />
           </div>
         </div>

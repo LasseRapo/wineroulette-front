@@ -15,7 +15,7 @@
     display: inline-block;
     width: var(--wheel-size);
     height: var(--wheel-size);
-    transition: rotate 5s;
+    transition: rotate 8s ease-in-out;
     pointer-events: none;
 }
 
@@ -39,9 +39,9 @@
 }
 
 .sector.selected {
-    stroke: red;
-    stroke-width: 2;
-    filter: drop-shadow(0 0 4px red);
+    stroke: var(--hover-color);
+    stroke-width: 4;
+    filter: drop-shadow(0 0 1px var(--hover-color));
 }
 
 .sector-label {

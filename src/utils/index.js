@@ -35,9 +35,15 @@ export function calculateLuminanceHex(hex) {
   return calculateLuminance(r, g, b)
 }
 
-export function calculateRotations(minSpin, maxSpin) {
+export function calculateRotations(minSpin, maxSpin, return_max=false) {
   const offset = Math.floor(Math.random() * 360)
   const rotationDeg = (minSpin + Math.ceil(Math.random() * maxSpin)) * 360 + offset
+
+  const theoreticalMax = (minSpin + maxSpin) * 360 + 359
+
+  if(return_max) {
+    return [rotationDeg, offset, theoreticalMax]
+  }
 
   return [rotationDeg, offset]
 }
@@ -139,8 +145,6 @@ export function calculateSectorFontSize(baseFontSize, numberOfSectors, labelLeng
 
   const sectorScale = Math.floor(Math.min(numberOfSectors / 5, 3)) * 0.2
   const labelScale = labelLength > 0 ? Math.floor(labelLength / 4) * 0.02: 0
-
-  console.log(sectorScale, labelScale)
 
   return Math.ceil(baseFontSize * (1 - sectorScale - labelScale))
 }

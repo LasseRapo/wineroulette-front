@@ -181,6 +181,12 @@ h3 {
   flex-grow: 1;
 }
 
+.settings-input.color {
+  height: 30px;
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
 .sector-setting-row {
   display: flex;
   flex-wrap: wrap;

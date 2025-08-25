@@ -9,8 +9,22 @@ const Row = ({ sectors, obj, onLabelChange, onColorChange, onRowRemove, headerCo
   return (
     <div className='sector-setting-row'>
       {headerComponent ? headerComponent: <></>}
-      <input className='settings-input text' headline='Nimi' onChange={(e) => onLabelChange(e, obj.id)} value={obj.label} placeholder="" />
-      <input className='settings-input text' headline='Väri' onChange={(e) => onColorChange(e, obj.id)} value={obj.color} placeholder='#ffffff' />
+      
+      <input 
+        className='settings-input text' 
+        headline='Nimi' 
+        onChange={(e) => onLabelChange(e, obj.id)} 
+        value={obj.label} 
+        placeholder="" />
+      
+      <input 
+        className='settings-input color' 
+        headline='Väri' 
+        onChange={(e) => onColorChange(e, obj.id)} 
+        value={obj.color} 
+        placeholder={DEFAULT_WHEEL_BACKGROUND} 
+        type='color'/>
+      
       <button
         disabled={sectors.length <= MIN_SECTORS ? true: false}
         onClick={onRowRemove} 
@@ -161,13 +175,15 @@ export default function SettingsMenu({ sectors, setSectors, showMenu = false }) 
           <input
             onChange={onGradientStartChange}
             value={gradientInput.start} 
-            className="settings-input text"
+            className="settings-input color"
+            type="color"
           />
 
           <input
             onChange={onGradientEndChange}
             value={gradientInput.end}
-            className="settings-input text"
+            className="settings-input color"
+            type="color"
           />
         </div>
       </div>

@@ -37,7 +37,7 @@ export function calculateLuminanceHex(hex) {
 
 export function calculateRotations(minSpin, maxSpin) {
   const offset = Math.floor(Math.random() * 360)
-  const rotationDeg = (minSpin + Math.floor(Math.random() * maxSpin)) * 360 + offset
+  const rotationDeg = (minSpin + Math.ceil(Math.random() * maxSpin)) * 360 + offset
 
   return [rotationDeg, offset]
 }

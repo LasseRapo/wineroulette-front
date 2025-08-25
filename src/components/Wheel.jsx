@@ -1,6 +1,6 @@
 import { useState } from "react";
 import '../styles/wheel.css'
-import { polar, calculateRotations, calculateLuminanceHex, wrapText } from "../utils";
+import { polar, calculateRotations, calculateLuminanceHex, wrapText, calculateSectorFontSize } from "../utils";
 
 export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -51,21 +51,22 @@ export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
       'Z'
     ].join(' ');
 
+    const lengthLimitedLabel = sector.label.length > MAX_LABEL_LENGTH
+                          ? sector.label.slice(0, MAX_LABEL_LENGTH) + '...'
+                          : sector.label
+    
     // Ensure that text is centered inside the sector properly
     const midAngle = startAngle + sweep / 2;
     const labelPos = {
       x: cx + (r * 0.5) * Math.cos((midAngle * Math.PI) / 180),
       y: cy + (r * 0.5) * Math.sin((midAngle * Math.PI) / 180),
-      fontSize: 5
+      fontSize: calculateSectorFontSize(5, sectors.length, lengthLimitedLabel)
     }
 
     // Make sure that text is never upside down when writing text to wheel
     let textRotation = calculateTextRotation(midAngle, 0) 
     startAngle = endAngle;
 
-    const lengthLimitedLabel = sector.label.length > MAX_LABEL_LENGTH
-                          ? sector.label.slice(0, MAX_LABEL_LENGTH) + '...'
-                          : sector.label
     return (
       <>
         <path

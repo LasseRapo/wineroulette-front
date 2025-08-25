@@ -93,26 +93,56 @@ export function generateLinearGradient(startHex='#000000', endHex='#ffffff', obj
   return gradientObjects
 }
 
-export function wrapText(text, maxCharPerLine) {
-  // Wrap text based on words (TODO: implement also character based solution if necessary)
+function _wrapTextByChar(text, maxCharPerLine) {
+  let lines = []
 
+  for( let i = 0; i < text.length; i += maxCharPerLine) {
+    lines.push(text.slice(i, i + maxCharPerLine))
+  }
+
+  return lines
+}
+
+export function wrapText(text, maxCharPerLine) {
+  // Wrap text based on words and wordcharacter limit
+  
   const words = text.split(' ')
   let lines  = []
   let currentLine = ""
 
-  words.forEach(word => {
-   if( (currentLine + " " + word).trim().length <= maxCharPerLine ) {
-    currentLine = (currentLine + " " + word).trim()
-   } else {
-    if( currentLine.length > 0) lines.push(currentLine)
-    currentLine = word
-   }
-  })
 
-  if (currentLine.length > 0) lines.push(currentLine)
+  for( let word of words) {
+    if(word.length > maxCharPerLine) {
+      if( currentLine.length > 0 ) {
+        lines.push(currentLine)
+        currentLine = ""
+      }
+
+      const chunks = _wrapTextByChar(word, maxCharPerLine)
+      lines.push(...chunks)
+    } else {
+      if ((currentLine + " " + word).trim().length <= maxCharPerLine) {
+        currentLine = (currentLine + " " + word).trim()
+      } else {
+        if( currentLine.length > 0) lines.push(currentLine)
+        currentLine = word 
+      }
+    }
+  }
   
+  if(currentLine.length > 0) lines.push(currentLine )
   return lines
 
+}
+
+export function calculateSectorFontSize(baseFontSize, numberOfSectors, labelLength) {
+
+  const sectorScale = Math.floor(Math.min(numberOfSectors / 5, 3)) * 0.2
+  const labelScale = labelLength > 0 ? Math.floor(labelLength / 4) * 0.02: 0
+
+  console.log(sectorScale, labelScale)
+
+  return Math.ceil(baseFontSize * (1 - sectorScale - labelScale))
 }
 
 

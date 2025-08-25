@@ -1,19 +1,24 @@
 import { useState } from "react"
 import { generateLinearGradient, generateRandomHexColor, generateUniqueID, hexToRgb, rgbToHex } from "../utils"
+import { DEFAULT_WHEEL_BACKGROUND } from "../utils/const";
 
-const Row = ({ obj, onLabelChange, onColorChange, onRowRemove, headerComponent}) => {
+const MIN_SECTORS = 2;
+const MAX_SECTORS = 20;
+
+const Row = ({ sectors, obj, onLabelChange, onColorChange, onRowRemove, headerComponent}) => {
   return (
     <div className='sector-setting-row'>
       {headerComponent ? headerComponent: <></>}
       <input className='settings-input text' headline='Nimi' onChange={(e) => onLabelChange(e, obj.id)} value={obj.label} placeholder="" />
       <input className='settings-input text' headline='Väri' onChange={(e) => onColorChange(e, obj.id)} value={obj.color} placeholder='#ffffff' />
-      <button onClick={onRowRemove} className="remove-specific-row-button">🗙</button>
+      <button
+        disabled={sectors.length <= MIN_SECTORS ? true: false}
+        onClick={onRowRemove} 
+        className="remove-specific-row-button">🗙</button>
     </div>
   )
 }
 
-const MIN_SECTORS = 2;
-const MAX_SECTORS = 20;
 
 export default function SettingsMenu({ sectors, setSectors, showMenu = false }) {
 
@@ -24,7 +29,7 @@ export default function SettingsMenu({ sectors, setSectors, showMenu = false }) 
 
   function _addRow() {
     if (sectors.length >= MAX_SECTORS) return;
-    setSectors((prev) => ([...prev, { id: generateUniqueID(), label: "", color: "#ffffff" }]))
+    setSectors((prev) => ([...prev, { id: generateUniqueID(), label: "", color: DEFAULT_WHEEL_BACKGROUND }]))
   }
 
   function _removeRow() {
@@ -116,6 +121,7 @@ export default function SettingsMenu({ sectors, setSectors, showMenu = false }) 
         {sectors.map((obj, index) => (
           <>
             <Row key={obj.id}
+              sectors={sectors}
               obj={obj}
               onLabelChange={onLabelChange}
               onColorChange={onColorChange}
@@ -142,6 +148,12 @@ export default function SettingsMenu({ sectors, setSectors, showMenu = false }) 
       <h3>Gradientti</h3>
       <div id="gradient-settings-container" className="row-container">
         <div id='gradient-settings' className="sector-setting-row">
+
+          <div id='auto-gradient-update-container' style={{marginBottom: '20px'}}>
+            <input type='checkbox' className='settings-input checkbox'/>
+            <label className="settings-label">Automaattinen gradientin päivitys (WiP)</label>
+          </div>
+
           <div id='gradient-headline-container' className="settings-headline-container">
             <h4 className="settings-subheadline">Start</h4>
             <h4 className="settings-subheadline">End</h4>

@@ -1,8 +1,7 @@
 * {
   --dark-foreground: #042A2B;
-  --hover-color: #EF7B45;
-  --background-color: #CDEDF6;
-
+  --hover-color: #ef7a43;
+  --background-color: #f7e5cb;
   --setting-box-translation: 655px;
 }
 
@@ -88,7 +87,6 @@
   width: 400px;
 }
 
-
 #settings-menu-container.hidden {
   visibility: hidden;
   opacity: 0;
@@ -172,7 +170,7 @@ h3 {
 .settings-input.checkbox {
   width: auto;
   padding: 0;
-  margin-right: 20px;
+  margin-right: 0px;
   margin-left: 10px;
   transform: scale(2.0);
 }
@@ -232,8 +230,12 @@ h3 {
   color: rgb(88, 88, 88);
 }
 
-.remove-specific-row-button:hover {
+.remove-specific-row-button:enabled:hover {
   color: var(--hover-color);
+}
+
+.remove-specific-row-button:disabled {
+  pointer-events: none;
 }
 
 #generate-random-gradient-button {

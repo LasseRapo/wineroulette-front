@@ -1,5 +1,14 @@
 * {
-    --sector-font-size: 7px
+    --knob-width: 25px;
+    --knob-border-color: black;
+    --knob-border-width: 3px;
+
+
+    /* Automatically calculated */
+    --knob-background-color: var(--hover-color);
+    --knob-height: calc(var(--knob-width) * 2);
+    --knob-border-triangle-width: calc(var(--knob-width) + var(--knob-border-width));
+    --knob-border-triangle-height: calc(2 * var(--knob-border-triangle-width));
 }
 
 .wheel {
@@ -43,9 +52,41 @@
 }
 
 .triangle-down {
+    /* This is the border-triangle.
+       Must be bigger than inner triangle otherwise
+       borders won't show up
+    */
+
     width: 0;
     height: 0;
-    border-left: 25px solid transparent;
-    border-right: 25px solid transparent;
-    border-top: 50px solid var(--hover-color);
+
+    border-left: var(--knob-border-triangle-width) solid transparent;
+    border-right: var(--knob-border-triangle-width) solid transparent;
+    border-top: var(--knob-border-triangle-height) solid black;
+}
+
+.triangle-down::before {
+
+    /* This is the inner triangle */
+    display: block;
+    position: relative;
+    z-index: 0;
+    width: 0;
+    height: 0;
+    content: " ";
+
+    border-left: var(--knob-width) solid transparent;
+    border-right: var(--knob-width) solid transparent;
+    border-top: var(--knob-height) solid var(--hover-color);
+
+
+    /* This margin just seemed to give best results 
+       and yes I know this is bit hacky but it is only way to my knowledge
+       place inner triangle in correct place without breaking stuff.
+
+       There could be better way to create triangle with borders that adjusts 
+       dynamically but this works. Dear me I really hope that you don't have to mess with 
+       this in future. 
+    */
+    margin: calc(-51px - var(--knob-border-width)) 0px 0px -25px;
 }

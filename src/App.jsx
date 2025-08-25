@@ -3,13 +3,14 @@ import './styles/App.css'
 import WheelOfFortune from './components/Wheel'
 import SettingsMenu from './components/SettingsMenu';
 import { generateUniqueID } from './utils';
+import { DEFAULT_WHEEL_BACKGROUND } from './utils/const';
 
 function App() {
 
   const [showSettings, setShowSettings] = useState(false)
   const [sectors, setSectors] = useState([
-    {id: generateUniqueID(), label: '', color: '#ffffff', active: true},
-    {id: generateUniqueID(), label: '', color: '#ffffff', active: true},
+    {id: generateUniqueID(), label: '', color: DEFAULT_WHEEL_BACKGROUND},
+    {id: generateUniqueID(), label: '', color: DEFAULT_WHEEL_BACKGROUND},
   ])
 
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import '../styles/wheel.css'
-import { polar, calculateRotations, calculateLuminanceHex } from "../utils";
+import { polar, calculateRotations, calculateLuminanceHex, wrapText } from "../utils";
 
 export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -10,8 +10,9 @@ export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
   const cx = sizeUnits / 2;
   const cy = sizeUnits / 2;
   const r = sizeUnits / 2 - 1;
-  const sweep = 360 / sectors.length; // basically this results into central angle of sector
-
+  
+  // basically this results into central angle of sector (when all sectors are the same size)
+  const sweep = 360 / sectors.length; 
   const MAX_LABEL_LENGTH = 20
 
   // Start drawing from top of the circle (-90 deg)
@@ -62,7 +63,7 @@ export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
     let textRotation = calculateTextRotation(midAngle, 0) 
     startAngle = endAngle;
 
-    const limitedLabel = sector.label.length > MAX_LABEL_LENGTH
+    const lengthLimitedLabel = sector.label.length > MAX_LABEL_LENGTH
                           ? sector.label.slice(0, MAX_LABEL_LENGTH) + '...'
                           : sector.label
     return (
@@ -84,7 +85,13 @@ export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
           fill={calculateLuminanceHex(sector.color) < 96 ? 'white': 'black'}
           transform={`rotate(${textRotation} ${labelPos.x} ${labelPos.y})`}
           style={ {'--sector-font-size': `${labelPos.fontSize}px`} } 
-          className="sector-label">{limitedLabel}</text>
+          className="sector-label">
+            {wrapText(lengthLimitedLabel, 15).map((line, j) => (
+              <tspan key={j} x={labelPos.x} dy={j === 0 ? 0: "1.2em"}>
+                {line}
+              </tspan>
+            ))}
+        </text>
       </>
     );
   });

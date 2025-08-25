@@ -55,6 +55,8 @@ export function generateLinearGradient(startHex='#000000', endHex='#ffffff', obj
        startHex - hex code of starting color
        endHex - hex code of ending color
        objects - list of sector objects
+
+       TODO: Implement this bellow
        cyclical - determines if gradient is flipped 
                   in midway point, useful when sectors
                   are visualized in circular format
@@ -90,6 +92,29 @@ export function generateLinearGradient(startHex='#000000', endHex='#ffffff', obj
 
   return gradientObjects
 }
+
+export function wrapText(text, maxCharPerLine) {
+  // Wrap text based on words (TODO: implement also character based solution if necessary)
+
+  const words = text.split(' ')
+  let lines  = []
+  let currentLine = ""
+
+  words.forEach(word => {
+   if( (currentLine + " " + word).trim().length <= maxCharPerLine ) {
+    currentLine = (currentLine + " " + word).trim()
+   } else {
+    if( currentLine.length > 0) lines.push(currentLine)
+    currentLine = word
+   }
+  })
+
+  if (currentLine.length > 0) lines.push(currentLine)
+  
+  return lines
+
+}
+
 
 export function generateRadialGradient() { 
   // do nothing 

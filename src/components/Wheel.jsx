@@ -12,6 +12,8 @@ export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
   const r = sizeUnits / 2 - 1;
   const sweep = 360 / sectors.length; // basically this results into central angle of sector
 
+  const MAX_LABEL_LENGTH = 20
+
   // Start drawing from top of the circle (-90 deg)
   let startAngle = -90;
 
@@ -52,12 +54,17 @@ export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
     const midAngle = startAngle + sweep / 2;
     const labelPos = {
       x: cx + (r * 0.5) * Math.cos((midAngle * Math.PI) / 180),
-      y: cy + (r * 0.5) * Math.sin((midAngle * Math.PI) / 180)
+      y: cy + (r * 0.5) * Math.sin((midAngle * Math.PI) / 180),
+      fontSize: 5
     }
 
     // Make sure that text is never upside down when writing text to wheel
     let textRotation = calculateTextRotation(midAngle, 0) 
     startAngle = endAngle;
+
+    const limitedLabel = sector.label.length > MAX_LABEL_LENGTH
+                          ? sector.label.slice(0, MAX_LABEL_LENGTH) + '...'
+                          : sector.label
     return (
       <>
         <path
@@ -75,8 +82,9 @@ export default function WheelOfFortune({ sectors = [], size = 800, onSelect }) {
           y={labelPos.y}
           textAnchor="middle"
           fill={calculateLuminanceHex(sector.color) < 96 ? 'white': 'black'}
-          transform={`rotate(${textRotation} ${labelPos.x} ${labelPos.y})`} 
-          className="sector-label">{sector.label}</text>
+          transform={`rotate(${textRotation} ${labelPos.x} ${labelPos.y})`}
+          style={ {'--sector-font-size': `${labelPos.fontSize}px`} } 
+          className="sector-label">{limitedLabel}</text>
       </>
     );
   });
